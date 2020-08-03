@@ -14,6 +14,7 @@ const db = mysql.createConnection({
   password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'ecommerce'
 })
+const routeV1 = require('./router/v1')
 
 db.connect((err) => {
   if (err) throw new err
@@ -26,7 +27,10 @@ app.use(bodyParser.json())
 app.use((req, res, next) => {
   req.db = db
   console.log(`${req.method} ${req.originalUrl}`);
+  next()
 })
+
+app.use('/api/v1', routeV1)
 
 app.listen(port, () => {
   console.log(`App started on port ${port}`);
